@@ -1,0 +1,5 @@
+lightning_logs/
+outputs/
+.idea/
+__pycache__/
+FashionMnist/

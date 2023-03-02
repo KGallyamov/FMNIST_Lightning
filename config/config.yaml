@@ -1,0 +1,7 @@
+defaults:
+  - _self_
+  - opt: adam
+
+params:
+ batch_size: 32
+ epochs: 10
