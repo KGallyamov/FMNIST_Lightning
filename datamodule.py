@@ -12,7 +12,7 @@ class FashionMNISTDataModule(pl.LightningDataModule):
         super().__init__()
         self.data_dir = data_dir
         self.transform = transforms.Compose([transforms.ToTensor(),
-                                             transforms.Normalize((0.5,), (0.5,))])
+                                             transforms.Normalize((0.1307,), (0.3081,))])
         self.batch_size = batch_size
         self.n_workers = 3
         self.train_val_split = train_val_split
@@ -36,13 +36,13 @@ class FashionMNISTDataModule(pl.LightningDataModule):
             self.mnist_predict = FashionMNIST(self.data_dir, train=False, transform=self.transform)
 
     def train_dataloader(self):
-        return DataLoader(self.mnist_train, batch_size=self.batch_size, num_workers=self.n_workers)
+        return DataLoader(self.mnist_train, batch_size=self.batch_size, num_workers=self.n_workers, drop_last=True)
 
     def val_dataloader(self):
-        return DataLoader(self.mnist_val, batch_size=self.batch_size, num_workers=self.n_workers)
+        return DataLoader(self.mnist_val, batch_size=self.batch_size, num_workers=self.n_workers, drop_last=True)
 
     def test_dataloader(self):
-        return DataLoader(self.mnist_test, batch_size=self.batch_size, num_workers=self.n_workers)
+        return DataLoader(self.mnist_test, batch_size=self.batch_size, num_workers=self.n_workers, drop_last=True)
 
     def predict_dataloader(self):
-        return DataLoader(self.mnist_predict, batch_size=32, num_workers=self.n_workers)
+        return DataLoader(self.mnist_predict, batch_size=self.batch_size, num_workers=self.n_workers, drop_last=True)

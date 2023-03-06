@@ -59,8 +59,7 @@ class FCNModule(pl.LightningModule):
     def validation_epoch_end(self, outputs):
         losses = sum([output["val_loss"].detach().item() for output in outputs])
         self.losses_history['val'].append(losses / len(outputs))
-        # Discard last batch accuracy since that batch has fewer items
-        accuracies = torch.stack([outputs[i]["batch_acc"] for i in range(len(outputs) - 1)])
+        accuracies = torch.stack([output["batch_acc"] for output in outputs])
         print(' Validation Accuracy %0.6f' % torch.mean(accuracies).item())
 
     def test_step(self, batch, batch_idx):
@@ -72,8 +71,7 @@ class FCNModule(pl.LightningModule):
         return {"test_loss": loss, "batch_acc": acc}
 
     def test_epoch_end(self, outputs):
-        # Discard the last batch accuracy since that batch has fewer items
-        accuracies = torch.stack([outputs[i]["batch_acc"] for i in range(len(outputs) - 1)])
+        accuracies = torch.stack([output["batch_acc"] for output in outputs])
         self.log('TestAcc', torch.mean(accuracies).item())
 
     def configure_optimizers(self):

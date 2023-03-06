@@ -1,5 +1,4 @@
 import os
-
 import hydra
 from omegaconf import OmegaConf, DictConfig
 from pytorch_lightning.callbacks import EarlyStopping
@@ -23,7 +22,7 @@ def my_app(cfg: DictConfig):
     fcn = FCNModule(cfg.opt)
 
     # train model
-    callback = EarlyStopping(monitor="val_loss", mode="min")
+    callback = EarlyStopping(monitor="val_loss", mode="min", patience=4)
     trainer = pl.Trainer(max_epochs=cfg.params.epochs, accelerator='gpu', callbacks=[callback])
 
     trainer.fit(model=fcn, datamodule=data)
